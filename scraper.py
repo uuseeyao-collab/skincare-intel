@@ -374,7 +374,7 @@ def main():
         if not successes:
             raise RuntimeError("没有成功抓取的数据源；保留已有data.json")
         # 按各源轮流选择，防止前两个来源独占40条限额。
-                unique = {}
+        unique = {}
 
         for index in range(MAX_PER_SOURCE):
             for pool in pools:
