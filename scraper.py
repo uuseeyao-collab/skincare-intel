@@ -380,11 +380,26 @@ def main():
                 if index < len(pool):
                     item = pool[index]
                     unique.setdefault(item["id"], item)
+        for index in range(MAX_PER_SOURCE):
+            for pool in pools:
+                if index < len(pool):
+                    item = pool[index]
+                    unique.setdefault(item["id"], item)
         if not unique:
             if (BASE_DIR / "data.json").exists():
                 raise RuntimeError("本次无有效条目；保留已有data.json")
             write_data([])
             return 0
+        items = ai_process(list(unique.values()))
+        if not items:
+            raise RuntimeError("AI未产出有效条目；保留已有data.json")
+        write_data(items)
+        return 0
+    except Exception as exc:
+        # 这里只显示本地诊断信息，不输出可能包含密钥的HTTP异常内容。
+        message = str(exc) if isinstance(exc, (RuntimeError, ValueError)) else type(exc).__name__
+        print(f"❌ {message}", file=sys.stderr)
+        return 1
         items = ai_process(list(unique.values()))
         if not items:
             raise RuntimeError("AI未产出有效条目；保留已有data.json")
