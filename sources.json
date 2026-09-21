@@ -1,0 +1,97 @@
+{
+  "sources": [
+    {
+      "name": "PubMed 抗衰临床研究",
+      "type": "api",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
+      "domain": "evidence",
+      "region": "global",
+      "provider": "pubmed",
+      "query": "(\"Skin Aging\"[MeSH Terms] OR photoaging[Title/Abstract] OR \"skin aging\"[Title/Abstract] OR wrinkle*[Title/Abstract]) AND (\"Clinical Trial\"[Publication Type] OR \"Randomized Controlled Trial\"[Publication Type]) AND (topical[Title/Abstract] OR cream[Title/Abstract] OR serum[Title/Abstract] OR cosmetic*[Title/Abstract])",
+      "days": 7,
+      "limit": 20,
+      "enabled": true
+    },
+    {
+      "name": "NMPA 化妆品公告（需人工）",
+      "type": "web",
+      "url": "https://www.nmpa.gov.cn/xxgk/ggtg/hzhpggtg/index.html",
+      "domain": "regulatory",
+      "region": "CN",
+      "enabled": false,
+      "note": "官方栏目入口；本次未成功读取，需人工验证访问。现有fetch_web未实现。"
+    },
+    {
+      "name": "FDA Recalls RSS（含化妆品，需人工筛选）",
+      "type": "rss",
+      "url": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/recalls/rss.xml",
+      "domain": "regulatory",
+      "region": "US",
+      "enabled": false,
+      "note": "FDA全品类召回订阅，非Cosmetics专属RSS，不覆盖全部化妆品法规。端点返回RSS内容类型，但本次工具无法解析；应验证条目并实现化妆品过滤后启用。"
+    },
+    {
+      "name": "Cosmetics Design 行业媒体（需人工）",
+      "type": "web",
+      "url": "https://www.cosmeticsdesign.com/",
+      "domain": "tech",
+      "region": "US",
+      "enabled": false,
+      "note": "本次主页和候选RSS端点均返回410；保留待核验入口，不冒充可用RSS。需确认迁移地址或更换媒体源。"
+    },
+    {
+      "name": "Google Patents 抗衰检索（需人工）",
+      "type": "web",
+      "url": "https://patents.google.com/?q=%28skin+aging%29&sort=new",
+      "domain": "supply",
+      "region": "global",
+      "enabled": false,
+      "note": "网页检索而非已核验公开API；现有脚本仅支持PubMed API。关键词为skin aging，需人工排除无关专利并核查法律状态。"
+    },
+    {
+      "name": "@cosme 新品日历",
+      "type": "web",
+      "url": "https://www.cosme.net/calendar/",
+      "domain": "competitor",
+      "region": "JP",
+      "enabled": false,
+      "note": "新品日历已读取；包含彩妆等非护肤品，需新增网页解析与护肤类别过滤。"
+    },
+    {
+      "name": "Olive Young Global 新品（需人工）",
+      "type": "web",
+      "url": "https://global.oliveyoung.com/display/page/new-arrivals",
+      "domain": "competitor",
+      "region": "KR",
+      "enabled": false,
+      "note": "新品入口已读取；商品数据涉及动态加载。现有fetch_web未实现，当前需人工采集。"
+    },
+    {
+      "name": "SpecialChem 化妆品原料技术（需人工）",
+      "type": "web",
+      "url": "https://www.specialchem.com/cosmetics",
+      "domain": "tech",
+      "region": "global",
+      "enabled": false,
+      "note": "原料技术入口；本次读取返回403，需人工访问并确认资料权限，不绕过访问限制。"
+    },
+    {
+      "name": "巨量算数 抖音趋势（需人工）",
+      "type": "web",
+      "url": "https://trendinsight.oceanengine.com/arithmetic-index",
+      "domain": "consumer",
+      "region": "CN",
+      "enabled": false,
+      "note": "页面入口可响应但本次未取得可用正文；需人工确认登录要求、查询权限和指标口径。不能据此声称已取得护肤趋势数据。"
+    },
+    {
+      "name": "Sephora 美国新品",
+      "type": "web",
+      "url": "https://www.sephora.com/beauty/new-beauty-products",
+      "domain": "competitor",
+      "region": "US",
+      "enabled": false,
+      "note": "新品导航页已读取；需跟进护肤新品链接并实现商品解析。现有fetch_web未实现。"
+    }
+  ]
+}
