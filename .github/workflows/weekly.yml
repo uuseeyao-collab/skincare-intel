@@ -1,1 +1,45 @@
-Weekly Skincare Intel
+name: Weekly Skincare Intel
+
+on:
+  schedule:
+    - cron: "0 1 * * 5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-intel:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run scraper
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python scraper.py
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push data
+        run: |
+          git add data.json
+          if git diff --cached --quiet; then
+            echo "data.json 没有变化，跳过提交"
+          else
+            git commit -m "chore: update skincare intelligence data"
+            git push
+          fi
