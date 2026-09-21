@@ -374,40 +374,38 @@ def main():
         if not successes:
             raise RuntimeError("没有成功抓取的数据源；保留已有data.json")
         # 按各源轮流选择，防止前两个来源独占40条限额。
-        unique = {}
+                unique = {}
+
         for index in range(MAX_PER_SOURCE):
             for pool in pools:
                 if index < len(pool):
                     item = pool[index]
                     unique.setdefault(item["id"], item)
-        for index in range(MAX_PER_SOURCE):
-            for pool in pools:
-                if index < len(pool):
-                    item = pool[index]
-                    unique.setdefault(item["id"], item)
+
         if not unique:
             if (BASE_DIR / "data.json").exists():
-                raise RuntimeError("本次无有效条目；保留已有data.json")
+                print("ℹ️ 本次无新增情报；保留已有 data.json")
+                return 0
+
             write_data([])
+            print("ℹ️ 本次无新增情报；已生成空的 data.json")
             return 0
+
         items = ai_process(list(unique.values()))
+
         if not items:
-            raise RuntimeError("AI未产出有效条目；保留已有data.json")
+            raise RuntimeError("AI未产出有效条目；保留已有 data.json")
+
         write_data(items)
         return 0
+
     except Exception as exc:
-        # 这里只显示本地诊断信息，不输出可能包含密钥的HTTP异常内容。
-        message = str(exc) if isinstance(exc, (RuntimeError, ValueError)) else type(exc).__name__
-        print(f"❌ {message}", file=sys.stderr)
-        return 1
-        items = ai_process(list(unique.values()))
-        if not items:
-            raise RuntimeError("AI未产出有效条目；保留已有data.json")
-        write_data(items)
-        return 0
-    except Exception as exc:
-        # 这里只显示本地诊断信息，不输出可能包含密钥的HTTP异常内容。
-        message = str(exc) if isinstance(exc, (RuntimeError, ValueError)) else type(exc).__name__
+        # 这里只显示本地诊断信息，不输出可能包含密钥的 HTTP 异常内容。
+        message = (
+            str(exc)
+            if isinstance(exc, (RuntimeError, ValueError))
+            else type(exc).__name__
+        )
         print(f"❌ {message}", file=sys.stderr)
         return 1
 
